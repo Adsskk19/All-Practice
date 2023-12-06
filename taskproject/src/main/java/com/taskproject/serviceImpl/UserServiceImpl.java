@@ -1,6 +1,7 @@
 package com.taskproject.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.taskproject.entity.Users;
@@ -15,8 +16,13 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 //we perform type casting here by converting userDto to Users data.
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public UserDto createUser(UserDto userDto) {
+		
+		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		Users user = userDtoToEntity(userDto); // converted userDto to Users
 		Users savedUser = userRepository.save(user);
 		return entityToUserDto(savedUser);

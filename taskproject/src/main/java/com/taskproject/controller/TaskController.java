@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,8 @@ public class TaskController {
 		return new ResponseEntity<>(taskService.saveTask(userid, taskDto),HttpStatus.CREATED);
 		
 	}
+	
+	@PreAuthorize(value="ROLE_USER")
 	//Get  all tasks
 	@GetMapping("/{userid}/tasks")
 	public ResponseEntity<List<TaskDto>> getALLTasks(
@@ -48,6 +51,8 @@ public class TaskController {
 		return new ResponseEntity<>(taskService.getTask(userid,taskid),HttpStatus.OK);
 	}
 	
+	
+	@PreAuthorize(value="ROLE_ADMIN")
 	//Del invd task
 	@DeleteMapping("/{userid}/tasks/{taskid}")
 	public ResponseEntity<String> deleteTask(
